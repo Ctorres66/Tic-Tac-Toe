@@ -113,7 +113,7 @@ public class main {
 			return false;
 		}
 //----------------------------------------------------------------------------------------------//
-//Sets up Array List of Possible Win Conditions
+//Sets up ArrayList of Possible Win Conditions
 		private void SetUpWinCons()
 		{
 			int[] a = {0, 1, 2};
