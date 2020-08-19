@@ -4,18 +4,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 
 public class main {
 	public static ArrayList<int[]>  WinningCombos = new ArrayList<int[]>();
 	public static int turnCounter = 1;
 	public static JButton[] spaces = new JButton[9];
-	public static String[] StateofSpace = new String[9];
-   	
+	public static ImageIcon X = new ImageIcon("C:/Users/ctorr/git/Tic-Tac-Toe/TicTacToe/src/resources/X.png");
+	public static ImageIcon O = new ImageIcon("C:/Users/ctorr/git/Tic-Tac-Toe/TicTacToe/src/resources/O.png");
+	
+	
 	public static void main(String args[]) 
 	{
+		SetUpWinCons();
 		spaces = drawCheckerboard();
 		giveCommands(spaces);
 	}
@@ -35,6 +40,7 @@ public class main {
 				{
 					buttons[i] = new JButton();
 					buttons[i].setSize(200, 200);
+					buttons[i].setIcon(null);
 					gridPanel.add(buttons[i]);
 				}
 				
@@ -55,7 +61,8 @@ public class main {
 		
 		private static void giveCommands(JButton[] spaces)
 		{
-			ActionListener command = new ActionListener() {
+			ActionListener command = new ActionListener() 
+			{
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -69,28 +76,38 @@ public class main {
 								if(e.getSource().equals(spaces[i]))
 								{
 									spaces[i].setActionCommand("pressed");
-									StateofSpace[i] = "X";
+									spaces[i].setIcon(X);
+									if (WinCheck(spaces) == true)
+									{
+										System.out.println("X is the Winner!");
+									}
 								}
 							}
-						}
-						
-						else 
+						}					
+						else if  (turnCounter%2 == 0) 
 						{
 							for (int i = 0; i < 9; i++)
 							{
 								if(e.getSource().equals(spaces[i]))
 								{
 									spaces[i].setActionCommand("pressed");
-									StateofSpace[i] = "O";
+									spaces[i].setIcon(O);
+									if (WinCheck(spaces) == true)
+									{
+										System.out.println("O is the Winner!");
+									}
 								}
 							}
 						}
+						turnCounter++;
+						System.out.println(turnCounter);
 					}
-					}
-					
 					
 				
 				};
+			};
+			
+			
 			for (int i = 0; i< 9; i++)
 			{
 				spaces[i].addActionListener(command);
@@ -98,14 +115,17 @@ public class main {
 			}
 		}
 //----------------------------------------------------------------------------------------------//
-		private boolean WinCheck(JButton[] spaces)
+//Checks if any of the players have won
+		public static boolean WinCheck(JButton[] spaces)
 		{
-			for (int[] WinCon : WinningCombos) {
+			for (int[] WinCon : WinningCombos)
+			{
 				int first = WinCon[0];
 				int second = WinCon[1];
 				int third = WinCon[2];
 				if(spaces[first].getIcon() == spaces[second].getIcon() && 
-						spaces[second].getIcon() == spaces[third].getIcon())
+						spaces[second].getIcon() == spaces[third].getIcon()
+						&& spaces[first].getIcon() != null)
 				{
 					return true;
 				}
@@ -114,7 +134,7 @@ public class main {
 		}
 //----------------------------------------------------------------------------------------------//
 //Sets up ArrayList of Possible Win Conditions
-		private void SetUpWinCons()
+		private static void SetUpWinCons()
 		{
 			int[] a = {0, 1, 2};
 			WinningCombos.add(a);
